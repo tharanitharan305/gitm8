@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gitm8 settings</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⚙ gitm8 settings</h1>
+      <p class="subtitle">Configure your AI-powered Git assistant</p>
+    </header>
+
+    <form id="config-form">
+      <!-- AI Provider -->
+      <section>
+        <h2>AI Provider</h2>
+
+        <div class="field">
+          <label for="apiBaseUrl">API Base URL</label>
+          <input type="url" id="apiBaseUrl" name="apiBaseUrl"
+                 placeholder="https://api.openai.com/v1" />
+          <span class="hint">Any OpenAI-compatible endpoint (OpenAI, LM Studio, Ollama proxy, Azure, etc.)</span>
+        </div>
+
+        <div class="field">
+          <label for="apiKey">API Key</label>
+          <div class="password-wrapper">
+            <input type="password" id="apiKey" name="apiKey"
+                   placeholder="sk-..." autocomplete="off" />
+            <button type="button" id="toggle-key" class="btn-small" title="Toggle visibility">👁</button>
+          </div>
+          <span class="hint">Stored locally — never sent anywhere except your API Base URL</span>
+        </div>
+
+        <div class="field">
+          <label for="model">Model</label>
+          <input type="text" id="model" name="model"
+                 placeholder="gpt-4o-mini" />
+          <span class="hint">Model name your provider supports (e.g. gpt-4o-mini, claude-sonnet-5, local-model)</span>
+        </div>
+      </section>
+
+      <!-- Commit Style -->
+      <section>
+        <h2>Commit Style</h2>
+
+        <div class="field">
+          <label for="commitStyle">Format</label>
+          <select id="commitStyle" name="commitStyle">
+            <option value="conventional">Conventional Commits (feat:, fix:, chore:, etc.)</option>
+            <option value="freeform">Freeform — no prefix</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="tone">Tone Preset</label>
+          <select id="tone" name="tone">
+            <option value="neutral">Neutral</option>
+            <option value="concise">Concise</option>
+            <option value="detailed">Detailed</option>
+            <option value="formal">Formal</option>
+            <option value="casual">Casual</option>
+            <option value="funny">Funny</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+
+        <div class="field" id="custom-tone-field" style="display:none;">
+          <label for="customTone">Custom Tone Description</label>
+          <textarea id="customTone" name="customTone" rows="2"
+                    placeholder="e.g. 'Write like a pirate' or 'Be very technical and precise'"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="maxDiffChars">Max Diff Characters</label>
+          <input type="number" id="maxDiffChars" name="maxDiffChars"
+                 min="1000" max="50000" placeholder="6000" />
+          <span class="hint">Diff is truncated to this many characters before sending to the AI</span>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button type="submit" id="save-btn">💾 Save</button>
+        <span id="save-feedback" class="feedback"></span>
+      </div>
+    </form>
+
+    <footer>
+      <p>Config file: <code id="config-path">~/.config/gitm8/config.json</code></p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

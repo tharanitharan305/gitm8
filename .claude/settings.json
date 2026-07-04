@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(node bin/gitmate.js --help)",
+      "Bash(node bin/gitmate.js config list)",
+      "Bash(node bin/gitmate.js status)",
+      "Bash(node bin/gitmate.js add README.md)",
+      "Bash(node bin/gitmate.js commit --dry-run)",
+      "Bash(git restore *)",
+      "Bash(git reset *)",
+      "Bash(node bin/gitmate.js config set tone detailed)",
+      "Bash(node bin/gitmate.js config get tone)",
+      "Bash(node bin/gitmate.js config set tone concise)",
+      "Bash(npm view *)",
+      "Bash(npm pkg *)",
+      "Bash(node bin/gitm8.js --help)",
+      "Bash(node bin/gitm8.js config list)"
+    ]
+  }
+}

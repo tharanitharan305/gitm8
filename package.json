@@ -1,0 +1,31 @@
+{
+  "name": "gitm8",
+  "version": "1.0.0",
+  "description": "AI-powered Git CLI wrapper — smarter commits, simpler workflow",
+  "type": "module",
+  "bin": {
+    "gitm8": "bin/gitm8.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "node bin/gitm8.js",
+    "postinstall": "echo '✓ gitm8 installed! Run `gitm8 config --ui` or `gitm8 config set` to configure your AI provider.'"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "commander": "^13.1.0",
+    "conf": "^13.1.0",
+    "execa": "^9.5.2",
+    "express": "^5.1.0",
+    "open": "^10.1.0",
+    "picocolors": "^1.1.1"
+  },
+  "license": "MIT"
+}
