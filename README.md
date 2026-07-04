@@ -1,283 +1,249 @@
+<div align="center">
+
 # gitm8 🤖
 
-**AI-powered Git CLI wrapper** — stage, commit, and push with smart defaults and AI-generated commit messages that actually describe what you changed.
+**The AI-Powered Git CLI That Also Visualizes Your Code**
+
+[![npm version](https://img.shields.io/npm/v/gitm8?color=6c8cff&label=npm)](https://www.npmjs.com/package/gitm8)
+[![license](https://img.shields.io/badge/license-MIT-4ade80)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/tharanitharan305/gitm8?style=flat&color=ffd666)](https://github.com/tharanitharan305/gitm8)
 
 ```bash
 npm install -g gitm8
 ```
 
-## Why gitm8?
+[GitHub Repository](https://github.com/tharanitharan305/gitm8) · [Report Bug](https://github.com/tharanitharan305/gitm8/issues) · [Request Feature](https://github.com/tharanitharan305/gitm8/issues)
 
-You write code, not commit messages. `gitm8` reads your staged diff, sends it to an AI (OpenAI, local LLM, or any OpenAI-compatible provider), and presents a polished commit message for review — all from your terminal.
+---
 
-All git operations go through `gitm8`, not raw `git`. It's a thin, opinionated wrapper — not a full reimplementation.
+**gitm8** is an open-source AI-powered Git CLI wrapper that does more than just commits — it **scans for secrets**, **checks your build**, **visualizes your code architecture**, and **automates your entire workflow** from one command.
 
-## Commands
+</div>
 
-### `gitm8 add [files...]`
+## ✨ Features at a Glance
 
-Stage files for commit. Defaults to `.` (all changes) if no files given.
+| Feature | Command | What it does |
+|---------|---------|-------------|
+| 🔐 **Secrets Scanner** | `gitm8 secrets-scan` | Detects API keys, tokens, and credentials before they leak to GitHub |
+| 📝 **AI Commit Messages** | `gitm8 commit` | Generates smart commit messages from your staged diff |
+| 🏗️ **Pre-push Build Gate** | `gitm8 precheck` | Detects your framework, runs the build, blocks push on failure |
+| 📊 **Code Visualization** | `gitm8 viz` | Interactive D3.js class/method relationship diagram + call tree |
+| ⚙️ **Configurable Pipeline** | `gitm8 config --ui` | Link commit → scan → build → push into one automated flow |
+| 🚀 **Smart Push** | `gitm8 push` | Auto-sets upstream, no more `--set-upstream` |
+| 🎨 **Colored Status** | `gitm8 status` | Beautiful, color-coded working tree status |
 
-```bash
-gitm8 add                    # stage everything
-gitm8 add src/index.js       # stage a single file
-```
+---
 
-Shows a colored summary of staged files after running.
+## 🚀 One-Click Pipeline
 
-### `gitm8 commit`
-
-Generate an AI commit message from staged changes and commit interactively.  
-**Pipeline-enabled** — secrets scan, precheck build, and auto-push run automatically based on your config.
-
-```bash
-gitm8 commit                 # full interactive flow with pipeline stages
-gitm8 commit -y              # accept first AI message, no review
-gitm8 commit --dry-run       # show message without committing
-```
-
-The interactive prompt gives you options to:
-- `[Enter]` **Accept and commit**
-- `[e]` **Edit** the message manually before committing
-- `[r]` **Regenerate** the message
-- `[t]` **Change tone** and regenerate
-- `[q]` **Quit** without committing
-
-When the pipeline is active, `gitm8 commit` runs this flow automatically:
-
-```
-🔐 secrets scan  →  📝 commit  →  🏗️  build  →  🚀 push
-     (if ON)        (always)      (if ON)       (if ON)
-```
-
-Each stage is a toggle in `gitm8 config --ui` — no manual hook setup needed.
-
-| Pipeline stage | Default | Config key | What it does |
-|---|---|---|---|
-| 🔐 Secrets scan | ON | `pipelineSecretsScan` | Scans staged files for API keys, tokens, credentials before committing |
-| 🏗️  Precheck | OFF | `pipelinePrecheck` | Detects framework, runs build after commit — blocks push on failure |
-| 🚀 Auto-push | OFF | `pipelineAutoPush` | Pushes to origin automatically after successful commit + build |
-
-### `gitm8 precheck`
-
-**Smart pre-push gate.** Detects your project framework → runs the build → offers to push on success.
+Configure once, then one command does it all:
 
 ```bash
-gitm8 precheck
+gitm8 commit
 ```
 
-What it does:
-1. 🔍 **Detects** your framework (Node.js, Rust, Go, Python, .NET, Dart, Deno)
-2. 🏗️ **Runs** the appropriate build command (`npm run build`, `cargo build`, etc.)
-3. 📛 **Shows** your current branch name
-4. ✅ On **success** — asks: *"Push to `<branch>`?"* and pushes with one `[Y]`
-5. ❌ On **failure** — blocks the push and shows the build errors
+Runs automatically: **🔐 scan for secrets → 📝 AI commit → 🏗️ build → 🚀 push**
 
-```
-📦 Precheck — Branch: feature/new-ui
-  Framework:  Node.js
-  Build:      running `npm run build`...
-
-> my-app@1.0.0 build
-> vite build
-
-✓ built in 2.3s
-
-✔ Build passed!
-
-? Push to feature/new-ui?  (Y/n)
-```
-
-### `gitm8 secrets-scan`
-
-**Detect secrets before they reach GitHub.** Scans every staged file for API keys, tokens, credentials, private keys, and other sensitive data — all locally, no AI needed, no data leaves your machine.
+Toggle each stage on/off in the web UI:
 
 ```bash
-gitm8 secrets-scan
+gitm8 config --ui
 ```
 
-What it detects:
-- 🔴 **Critical** — AWS keys, GitHub tokens, Slack/Discord tokens, private keys, bearer tokens
-- 🟡 **High** — Stripe keys, Google API keys, MongoDB/Postgres connection strings, npm tokens, Azure secrets, service accounts
-- 🔵 **Medium** — Password/config values, JWT tokens, .env files staged, sensitive file extensions (.pem, .key, .cert)
-- ⚪ **Low** — Base64 blobs near auth context, JDBC strings
+| Pipeline Stage | Default | What it protects you from |
+|---------------|---------|--------------------------|
+| 🔐 Secrets Scan | ✅ ON | Accidentally committing AWS keys, GitHub tokens, database passwords |
+| 🏗️  Build Check | ⏺ OFF | Pushing broken code that doesn't compile |
+| 🚀 Auto-Push | ⏺ OFF | Forgetting to push after a successful commit |
 
-If critical or high secrets are found, you can:
-- **Unstage** the offending files automatically
-- **Continue** anyway (not recommended)
-- **Cancel** and fix first
+---
 
-```
-🔐 Secrets Scan
-  Scanning staged files for secrets, keys, and credentials...
+## 📊 Code Visualization (`gitm8 viz`)
 
-⚠  3 potential secrets found
-
-▌ CRITICAL  1 result:
-    config/credentials.json
-      L5:12  GitHub Token — GitHub personal access token
-             `ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
-
-▌   HIGH    2 results:
-    .env
-      L1:1  .env Variable — Environment variable `DB_PASSWORD` with a non-placeholder value
-             `DB_PASSWORD=supersecret123`
-
-──────────────────────────────────────────────────
-⚠  1 critical secret detected!
-
-? Critical secrets found! What would you like to do?
-  › Unstage files with secrets    (remove from staging)
-    Continue anyway               (not recommended)
-    Cancel and return             (review changes first)
-```
-
-### `gitm8 viz`
-
-**Visualize your code architecture.** Scans every source file (JS/TS/TSX, Python, Java, Dart), discovers classes and methods, traces calls across files, and opens an interactive D3.js relationship diagram in your browser.
+The killer feature that sets gitm8 apart — **code relationship diagrams, zero setup**.
 
 ```bash
 gitm8 viz
 ```
 
-How it works:
-1. 🔍 **Discovers** all `.js`, `.ts`, `.tsx`, `.jsx`, `.py`, `.java`, `.dart` files
-2. 🧠 **Parses** classes and methods using a line-by-line state machine
-3. 🔗 **Traces** method calls across files — finds which method calls which
-4. 📊 **Opens** an interactive force-directed graph in your browser
+Scans your entire project (JS, TS/TSX, Python, Java, Dart), builds a class/method relationship graph, and opens an interactive D3.js visualization in your browser with:
 
-**Interactive diagram features:**
-- 🖱 **Drag** nodes to rearrange the graph
-- 🔍 **Scroll** to zoom in/out
-- 👆 **Hover** a node to see file path and details
-- 🎯 **Click** a node to highlight all connected methods — instantly see impact
-- 📁 Cross-file relationships shown as dashed lines
+- 🖱 **Draggable force-directed graph** — explore architecture visually
+- 🔍 **Search bar** — instantly find any class, method, or file
+- 🌳 **Call tree panel** — see the full hierarchy from entry point to leaf
+- 🎯 **Click to highlight** — instantly trace which methods call which
+- 📁 **Cross-file relationships** — dashed lines show connections across files
+- 🔌 **100% local** — no AI, no API calls, works fully offline
 
-```
-📊 Code Relationship Diagram — 14 nodes · 16 edges · 6 files
+> **Perfect for:** Onboarding to new codebases, refactoring with confidence, finding dead code, understanding Flutter widget trees, reviewing PR impacts.
 
-     ┌─────────────────────┐
-     │   User.sendEmail    │
-     └──────┬──────────────┘
-            │ calls
-     ┌──────▼──────────────┐
-     │   Mailer.send       │
-     └──────┬──────────────┘
-            │ calls
-     ┌──────▼──────────────┐
-     │   Logger.write      │  ← cross-file (dashed)
-     └─────────────────────┘
-```
+---
 
-**100% local.** No AI needed. No API calls. Works fully offline.
-
-### `gitm8 push`
-
-Push the current branch to origin. Automatically sets upstream if needed.
+## 🔐 Secrets Scanner
 
 ```bash
-gitm8 push
+gitm8 secrets-scan    # standalone
+gitm8 commit           # runs automatically (default: ON)
 ```
 
-### `gitm8 status`
+Catches **30+ secret patterns** across 4 severity levels:
 
-Show working tree status with colored, reformatted output.
+| Severity | Examples |
+|----------|---------|
+| 🔴 **Critical** | AWS keys, GitHub tokens, Slack tokens, Discord tokens, private keys, bearer tokens |
+| 🟡 **High** | Stripe live keys, Google API keys, MongoDB/Postgres connection strings, npm tokens, service accounts |
+| 🔵 **Medium** | Password values in config, JWT tokens, .env files, sensitive files (.pem, .key) |
+| ⚪ **Low** | Base64 near auth context, JDBC strings |
+
+**Zero data leaves your machine** — all pattern matching is local regex, no network calls, no API key needed.
+
+---
+
+## 🏗️ Smart Precheck
 
 ```bash
-gitm8 status
+gitm8 precheck
 ```
 
-### `gitm8 config`
+Auto-detects your project framework and runs the right build command:
 
-Manage settings from the CLI or the web UI.
+| Framework | Build Command | Detected by |
+|-----------|--------------|------------|
+| **Node.js** | `npm run build` | `package.json` with build script |
+| **Rust** | `cargo build` | `Cargo.toml` |
+| **Go** | `go build ./...` | `go.mod` |
+| **Python** | _(skipped)_ | `requirements.txt`, `pyproject.toml` |
+| **.NET** | `dotnet build` | `.csproj` / `.sln` files |
+| **Dart/Flutter** | `dart compile` | `pubspec.yaml` |
+
+On success → offers to push with one keystroke. On failure → blocks push, shows errors.
+
+---
+
+## 📝 AI Commit Messages
 
 ```bash
-gitm8 config list                        # show all settings
-gitm8 config get apiKey                  # show a value (masked for apiKey)
-gitm8 config set model gpt-4o-mini       # set a value
-gitm8 config set tone casual             # set tone preset
-gitm8 config --ui                        # open settings UI in browser
+gitm8 commit                # interactive flow
+gitm8 commit -y             # accept first message, no review
+gitm8 commit --dry-run      # preview without committing
 ```
 
-**Config keys:**
-| Key | Type | Default | Description |
-|---|---|---|---|
-| `apiBaseUrl` | string | `https://api.openai.com/v1` | Any OpenAI-compatible endpoint |
-| `apiKey` | string | — | Your API key (never printed in plaintext) |
-| `model` | string | `gpt-4o-mini` | Model name your provider supports |
-| `tone` | string | `concise` | Tone preset: neutral, concise, detailed, formal, casual, funny, custom |
-| `customTone` | string | — | Free-form tone description (used when tone=custom) |
-| `commitStyle` | string | `conventional` | `conventional` (feat:/fix:/chore:) or `freeform` |
-| `maxDiffChars` | number | `6000` | Max diff characters sent to AI (1000–50000) |
-| `pipelineSecretsScan` | boolean | `true` | 🔐 Run secrets scan before every commit |
-| `pipelinePrecheck` | boolean | `false` | 🏗️  Run framework build after commit, block push on fail |
-| `pipelineAutoPush` | boolean | `false` | 🚀 Auto-push after successful commit + build |
+- **6 tone presets** — neutral, concise, detailed, formal, casual, funny
+- **Custom tone** — "write like a pirate", "very technical"
+- **Conventional commits** — `feat:`, `fix:`, `chore:`, or freeform
+- **Works with any provider** — OpenAI, local LLMs (LM Studio, Ollama), Azure, any OpenAI-compatible endpoint
 
-## Configuration
+---
 
-### Quick start
+## ⚙️ Configuration
+
+### Web UI (easiest)
 
 ```bash
-# Configure via CLI
-gitm8 config set apiBaseUrl https://api.openai.com/v1
-gitm8 config set apiKey sk-your-key-here
-gitm8 config set model gpt-4o-mini
-
-# Or use the web UI
 gitm8 config --ui
 ```
 
-### Using with any AI provider
+### CLI
 
-`gitm8` speaks the OpenAI `/chat/completions` API format, so it works with:
+```bash
+gitm8 config set apiKey sk-...
+gitm8 config set model gpt-4o-mini
+gitm8 config set tone casual
+gitm8 config set pipelinePrecheck true
+gitm8 config set pipelineAutoPush true
+```
 
-- **OpenAI** — `https://api.openai.com/v1`
-- **Local LLMs** (LM Studio, Ollama, etc.) — your local server URL
-- **Azure OpenAI** — your custom endpoint
-- **Any OpenAI-compatible proxy**
+### All Config Keys
 
-### Tone presets
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `apiBaseUrl` | string | `https://api.openai.com/v1` | Any OpenAI-compatible endpoint |
+| `apiKey` | string | — | Your API key (masked in output) |
+| `model` | string | `gpt-4o-mini` | Model your provider supports |
+| `tone` | string | `concise` | neutral, concise, detailed, formal, casual, funny, custom |
+| `customTone` | string | — | Free-form tone (used when tone=custom) |
+| `commitStyle` | string | `conventional` | `conventional` or `freeform` |
+| `maxDiffChars` | number | `6000` | Max diff chars sent to AI (1000–50000) |
+| `pipelineSecretsScan` | boolean | `true` | 🔐 Run secrets scan before commit |
+| `pipelinePrecheck` | boolean | `false` | 🏗️  Run build after commit |
+| `pipelineAutoPush` | boolean | `false` | 🚀 Auto-push after commit+build |
 
-| Preset | Effect |
-|---|---|
-| `neutral` | Describe changes without stylistic flourish |
-| `concise` | Single line, ≤72 characters (default) |
-| `detailed` | Summary line + bullet-point body explaining the why |
-| `formal` | Professional, formal language |
-| `casual` | Relaxed, conversational tone |
-| `funny` | Light humor while staying informative |
-| `custom` | Your own free-form tone instruction |
+---
 
-## Installation
+## 📦 Installation
 
-### Global install (recommended)
+### Global (recommended)
 
 ```bash
 npm install -g gitm8
 ```
 
-### Local development
+### From source
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/tharanitharan305/gitm8.git
 cd gitm8
 npm install
-npm link              # makes `gitm8` available globally
+npm link
 ```
 
-## Requirements
+### From GitHub Packages
+
+```bash
+npm install @tharanitharan305/gitm8
+```
+
+---
+
+## 🔧 Requirements
 
 - **Node.js** >= 18
 - **Git** (any modern version)
-- An API key for your chosen AI provider
+- An API key for **any** OpenAI-compatible provider (for commit generation)
 
-## Tips
+> Secrets scan, viz, precheck, and status all work **without any API key**.
 
-- Run `gitm8 config --ui` for a visual settings panel
-- Use `gitm8 commit --dry-run` first to preview the AI's message
-- Combine with `gitm8 add` and `gitm8 push` for a full `add → commit → push` workflow
-- Set `maxDiffChars` lower if your diffs are huge (saves tokens)
+---
 
-## License
+## 🌟 Why gitm8?
 
-MIT
+| Problem | gitm8 solution |
+|---------|---------------|
+| "I pushed an API key to GitHub again" | 🔐 Secrets scan runs before every commit |
+| "This commit message is useless" | 🤖 AI generates meaningful messages from your actual diff |
+| "Does this code even compile?" | 🏗️ Precheck builds before push |
+| "Where is this method called from?" | 📊 Viz shows an interactive caller graph |
+| "I forgot to push" | 🚀 Auto-push after successful build |
+| "I run 5 commands every time" | ⚙️ One pipeline: scan → commit → build → push |
+| "New dev onboards slowly" | 🌳 Call tree shows architecture instantly |
+
+---
+
+## 🗺️ Roadmap
+
+- [x] AI commit messages with tone control
+- [x] Secrets scanner (30+ patterns, all local)
+- [x] Pre-push build check (multi-framework)
+- [x] Code visualization with D3.js + call tree
+- [ ] Commit splitting (AI-suggested granular commits)
+- [ ] PR description generation from diff
+- [ ] Impact analysis ("this change affects N files")
+- [ ] VS Code extension
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Open an [issue](https://github.com/tharanitharan305/gitm8/issues) or [pull request](https://github.com/tharanitharan305/gitm8/pulls).
+
+---
+
+<div align="center">
+
+Made with ❤️ by [tharanitharan305](https://github.com/tharanitharan305)
+
+**⭐ Star the repo if you find this useful!**
+
+[GitHub](https://github.com/tharanitharan305/gitm8) · [npm](https://www.npmjs.com/package/gitm8) · [Issues](https://github.com/tharanitharan305/gitm8/issues)
+
+</div>
