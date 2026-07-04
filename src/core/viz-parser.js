@@ -320,13 +320,25 @@ export function discoverFiles(rootDir) {
   const results = [];
   const skipDirs = new Set([
     'node_modules', '.git', 'dist', 'build', '.next', '.nuxt',
-    'out', '.output', 'target', 'bin', 'obj', '.dart_tool',
-    '__pycache__', 'venv', '.venv', '.eggs', 'egg-info',
+    'out', '.output', 'target', 'bin', 'obj', '.dart_tool', '.dart_tool',
+    '__pycache__', 'venv', '.venv', '.eggs', 'egg-info', '.pub-cache',
     'coverage', '.nyc_output', '.tox', '.mypy_cache', '.pytest_cache',
     '.gradle', '.idea', '.vscode', '.svelte-kit', '.vercel',
-    'cdk.out', '.serverless', '.terraform', '.next',
+    '.cdk.out', '.serverless', '.terraform', '.next',
     'packages', // skip monorepo inner roots — user can `cd` into sub-pkg
+    'build',    // Flutter build output
+    '.dart_tool',
   ]);
+
+  /** Skip generated / boilerplate file patterns */
+  function isGeneratedFile(name) {
+    return /\.(g|freezed|gen|config)\.(dart|ts|js)$/.test(name) ||
+           name.endsWith('.g.dart') || name.endsWith('.freezed.dart') ||
+           name.endsWith('.gen.dart') || name.endsWith('.config.dart') ||
+           name.endsWith('.pb.dart') || name.endsWith('.pbenum.dart') ||
+           /^.*?\.module\.(ts|js)$/.test(name) ||
+           name.endsWith('.min.js');
+  }
 
   function walk(dir) {
     let entries;
@@ -341,7 +353,7 @@ export function discoverFiles(rootDir) {
         }
       } else if (entry.isFile()) {
         const ext = extname(entry.name).toLowerCase();
-        if (EXT_MAP[ext]) {
+        if (EXT_MAP[ext] && !isGeneratedFile(entry.name)) {
           results.push(fullPath);
         }
       }
