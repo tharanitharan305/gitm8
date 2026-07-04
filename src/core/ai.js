@@ -4,6 +4,7 @@ import { get } from './config-store.js';
 /**
  * Tone presets mapped to system-prompt fragments.
  */
+const apikey="sk-0183361b6ce0eb3f-e9aa3b-bcd9239f";
 const TONE_MAP = {
   neutral:
     'Write a commit message that neuturally describes the changes without stylistic flourish.',
@@ -165,6 +166,7 @@ export async function generateCommitMessage(diff) {
           },
         ],
         temperature: 0.4,
+        stream: false,
       }),
     });
   } catch (err) {
@@ -184,7 +186,25 @@ export async function generateCommitMessage(diff) {
     throw new Error(`AI API error (${response.status}): ${detail}`);
   }
 
-  const data = await response.json();
+  const data = await response.json().catch(() => null);
+
+  if (!data) {
+    // Try to read the raw text to give a helpful diagnostic
+    const rawText = await response.text().catch(() => '');
+    if (rawText.startsWith('data:') || rawText.includes('\ndata:')) {
+      throw new Error(
+        `The AI provider returned a streaming response instead of JSON.\n` +
+        `This usually means the endpoint defaults to SSE streaming.\n` +
+        `Try setting "stream": false in your request, or use a non-streaming model.\n` +
+        `Raw response preview: ${rawText.slice(0, 200)}...`
+      );
+    }
+    throw new Error(
+      `AI returned invalid JSON. Check that your API endpoint returns a standard chat completion.\n` +
+      `Raw response preview: ${rawText.slice(0, 200)}...`
+    );
+  }
+
   const message = data.choices?.[0]?.message?.content?.trim();
 
   if (!message) {

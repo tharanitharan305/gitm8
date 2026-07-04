@@ -72,6 +72,50 @@ What it does:
 ? Push to feature/new-ui?  (Y/n)
 ```
 
+### `gitm8 secrets-scan`
+
+**Detect secrets before they reach GitHub.** Scans every staged file for API keys, tokens, credentials, private keys, and other sensitive data — all locally, no AI needed, no data leaves your machine.
+
+```bash
+gitm8 secrets-scan
+```
+
+What it detects:
+- 🔴 **Critical** — AWS keys, GitHub tokens, Slack/Discord tokens, private keys, bearer tokens
+- 🟡 **High** — Stripe keys, Google API keys, MongoDB/Postgres connection strings, npm tokens, Azure secrets, service accounts
+- 🔵 **Medium** — Password/config values, JWT tokens, .env files staged, sensitive file extensions (.pem, .key, .cert)
+- ⚪ **Low** — Base64 blobs near auth context, JDBC strings
+
+If critical or high secrets are found, you can:
+- **Unstage** the offending files automatically
+- **Continue** anyway (not recommended)
+- **Cancel** and fix first
+
+```
+🔐 Secrets Scan
+  Scanning staged files for secrets, keys, and credentials...
+
+⚠  3 potential secrets found
+
+▌ CRITICAL  1 result:
+    config/credentials.json
+      L5:12  GitHub Token — GitHub personal access token
+             `ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+
+▌   HIGH    2 results:
+    .env
+      L1:1  .env Variable — Environment variable `DB_PASSWORD` with a non-placeholder value
+             `DB_PASSWORD=supersecret123`
+
+──────────────────────────────────────────────────
+⚠  1 critical secret detected!
+
+? Critical secrets found! What would you like to do?
+  › Unstage files with secrets    (remove from staging)
+    Continue anyway               (not recommended)
+    Cancel and return             (review changes first)
+```
+
 ### `gitm8 push`
 
 Push the current branch to origin. Automatically sets upstream if needed.

@@ -7,6 +7,7 @@ import pushCommand from './commands/push.js';
 import statusCommand from './commands/status.js';
 import configCommand from './commands/config.js';
 import precheckCommand from './commands/precheck.js';
+import secretsScanCommand from './commands/secrets-scan.js';
 
 const pkg = { version: '1.0.0', description: 'AI-powered Git CLI wrapper' };
 
@@ -59,6 +60,14 @@ program
   .action(async () => {
     await requireRepo();
     await precheckCommand();
+  });
+
+program
+  .command('secrets-scan')
+  .description('Scan staged files for secrets, API keys, and credentials')
+  .action(async () => {
+    await requireRepo();
+    await secretsScanCommand();
   });
 
 program
