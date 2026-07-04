@@ -320,14 +320,14 @@ export function discoverFiles(rootDir) {
   const results = [];
   const skipDirs = new Set([
     'node_modules', '.git', 'dist', 'build', '.next', '.nuxt',
-    'out', '.output', 'target', 'bin', 'obj', '.dart_tool', '.dart_tool',
+    'out', '.output', 'target', 'bin', 'obj', '.dart_tool',
     '__pycache__', 'venv', '.venv', '.eggs', 'egg-info', '.pub-cache',
     'coverage', '.nyc_output', '.tox', '.mypy_cache', '.pytest_cache',
     '.gradle', '.idea', '.vscode', '.svelte-kit', '.vercel',
     '.cdk.out', '.serverless', '.terraform', '.next',
-    'packages', // skip monorepo inner roots — user can `cd` into sub-pkg
-    'build',    // Flutter build output
-    '.dart_tool',
+    'packages',
+    // Flutter platform dirs — no user application code
+    'android', 'ios', 'web', 'test', 'integration_test',
   ]);
 
   /** Skip generated / boilerplate file patterns */

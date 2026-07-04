@@ -9,6 +9,7 @@ import configCommand from './commands/config.js';
 import precheckCommand from './commands/precheck.js';
 import secretsScanCommand from './commands/secrets-scan.js';
 import vizCommand from './commands/viz.js';
+import depsCommand from './commands/deps.js';
 
 const pkg = { version: '1.0.0', description: 'AI-powered Git CLI wrapper' };
 
@@ -76,6 +77,13 @@ program
   .description('Visualize class/method relationships in an interactive diagram')
   .action(async () => {
     await vizCommand();
+  });
+
+program
+  .command('deps')
+  .description('Analyze layered architecture — UI → Controllers → Services → Data')
+  .action(async () => {
+    await depsCommand();
   });
 
 program

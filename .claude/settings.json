@@ -15,7 +15,11 @@
       "Bash(npm view *)",
       "Bash(npm pkg *)",
       "Bash(node bin/gitm8.js --help)",
-      "Bash(node bin/gitm8.js config list)"
+      "Bash(node bin/gitm8.js config list)",
+      "Bash(timeout 6 node bin/gitm8.js deps)",
+      "Bash(node -e ' *)",
+      "Bash(timeout 5 node bin/gitm8.js viz)",
+      "Bash(timeout 5 node bin/gitm8.js deps)"
     ]
   }
 }
