@@ -8,6 +8,7 @@ import statusCommand from './commands/status.js';
 import configCommand from './commands/config.js';
 import precheckCommand from './commands/precheck.js';
 import secretsScanCommand from './commands/secrets-scan.js';
+import vizCommand from './commands/viz.js';
 
 const pkg = { version: '1.0.0', description: 'AI-powered Git CLI wrapper' };
 
@@ -68,6 +69,13 @@ program
   .action(async () => {
     await requireRepo();
     await secretsScanCommand();
+  });
+
+program
+  .command('viz')
+  .description('Visualize class/method relationships in an interactive diagram')
+  .action(async () => {
+    await vizCommand();
   });
 
 program

@@ -132,6 +132,45 @@ If critical or high secrets are found, you can:
     Cancel and return             (review changes first)
 ```
 
+### `gitm8 viz`
+
+**Visualize your code architecture.** Scans every source file (JS/TS/TSX, Python, Java, Dart), discovers classes and methods, traces calls across files, and opens an interactive D3.js relationship diagram in your browser.
+
+```bash
+gitm8 viz
+```
+
+How it works:
+1. 🔍 **Discovers** all `.js`, `.ts`, `.tsx`, `.jsx`, `.py`, `.java`, `.dart` files
+2. 🧠 **Parses** classes and methods using a line-by-line state machine
+3. 🔗 **Traces** method calls across files — finds which method calls which
+4. 📊 **Opens** an interactive force-directed graph in your browser
+
+**Interactive diagram features:**
+- 🖱 **Drag** nodes to rearrange the graph
+- 🔍 **Scroll** to zoom in/out
+- 👆 **Hover** a node to see file path and details
+- 🎯 **Click** a node to highlight all connected methods — instantly see impact
+- 📁 Cross-file relationships shown as dashed lines
+
+```
+📊 Code Relationship Diagram — 14 nodes · 16 edges · 6 files
+
+     ┌─────────────────────┐
+     │   User.sendEmail    │
+     └──────┬──────────────┘
+            │ calls
+     ┌──────▼──────────────┐
+     │   Mailer.send       │
+     └──────┬──────────────┘
+            │ calls
+     ┌──────▼──────────────┐
+     │   Logger.write      │  ← cross-file (dashed)
+     └─────────────────────┘
+```
+
+**100% local.** No AI needed. No API calls. Works fully offline.
+
 ### `gitm8 push`
 
 Push the current branch to origin. Automatically sets upstream if needed.
