@@ -27,10 +27,11 @@ Shows a colored summary of staged files after running.
 
 ### `gitm8 commit`
 
-Generate an AI commit message from staged changes and commit interactively.
+Generate an AI commit message from staged changes and commit interactively.  
+**Pipeline-enabled** — secrets scan, precheck build, and auto-push run automatically based on your config.
 
 ```bash
-gitm8 commit                 # full interactive flow
+gitm8 commit                 # full interactive flow with pipeline stages
 gitm8 commit -y              # accept first AI message, no review
 gitm8 commit --dry-run       # show message without committing
 ```
@@ -41,6 +42,21 @@ The interactive prompt gives you options to:
 - `[r]` **Regenerate** the message
 - `[t]` **Change tone** and regenerate
 - `[q]` **Quit** without committing
+
+When the pipeline is active, `gitm8 commit` runs this flow automatically:
+
+```
+🔐 secrets scan  →  📝 commit  →  🏗️  build  →  🚀 push
+     (if ON)        (always)      (if ON)       (if ON)
+```
+
+Each stage is a toggle in `gitm8 config --ui` — no manual hook setup needed.
+
+| Pipeline stage | Default | Config key | What it does |
+|---|---|---|---|
+| 🔐 Secrets scan | ON | `pipelineSecretsScan` | Scans staged files for API keys, tokens, credentials before committing |
+| 🏗️  Precheck | OFF | `pipelinePrecheck` | Detects framework, runs build after commit — blocks push on failure |
+| 🚀 Auto-push | OFF | `pipelineAutoPush` | Pushes to origin automatically after successful commit + build |
 
 ### `gitm8 precheck`
 
@@ -154,6 +170,9 @@ gitm8 config --ui                        # open settings UI in browser
 | `customTone` | string | — | Free-form tone description (used when tone=custom) |
 | `commitStyle` | string | `conventional` | `conventional` (feat:/fix:/chore:) or `freeform` |
 | `maxDiffChars` | number | `6000` | Max diff characters sent to AI (1000–50000) |
+| `pipelineSecretsScan` | boolean | `true` | 🔐 Run secrets scan before every commit |
+| `pipelinePrecheck` | boolean | `false` | 🏗️  Run framework build after commit, block push on fail |
+| `pipelineAutoPush` | boolean | `false` | 🚀 Auto-push after successful commit + build |
 
 ## Configuration
 

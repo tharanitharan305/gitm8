@@ -36,6 +36,7 @@ export async function startServer() {
     const allowedKeys = [
       'apiBaseUrl', 'apiKey', 'model', 'tone', 'customTone',
       'commitStyle', 'maxDiffChars',
+      'pipelineSecretsScan', 'pipelinePrecheck', 'pipelineAutoPush',
     ];
 
     for (const key of allowedKeys) {

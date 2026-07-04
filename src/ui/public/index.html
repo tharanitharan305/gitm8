@@ -82,6 +82,57 @@
         </div>
       </section>
 
+      <!-- Pipeline Automation -->
+      <section>
+        <h2>Pipeline <span class="badge">automation</span></h2>
+        <p class="section-hint">These steps run automatically when you <code>gitm8 commit</code>.</p>
+
+        <div class="field toggle-row">
+          <div class="toggle-info">
+            <label for="pipelineSecretsScan">🔐 Secrets Scan</label>
+            <span class="hint">Scan staged files for API keys, tokens, and credentials before committing</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="pipelineSecretsScan" name="pipelineSecretsScan" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="field toggle-row">
+          <div class="toggle-info">
+            <label for="pipelinePrecheck">🏗️  Precheck (Build)</label>
+            <span class="hint">Detect framework and run build after committing — blocks push on failure</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="pipelinePrecheck" name="pipelinePrecheck" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="field toggle-row">
+          <div class="toggle-info">
+            <label for="pipelineAutoPush">🚀 Auto-Push</label>
+            <span class="hint">Push to origin automatically after successful commit + build</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="pipelineAutoPush" name="pipelineAutoPush" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="pipeline-visual">
+          <code>gitm8 commit</code>
+          <span class="arrow">→</span>
+          <span class="step">🔐 scan</span>
+          <span class="arrow">→</span>
+          <span class="step">📝 commit</span>
+          <span class="arrow">→</span>
+          <span class="step">🏗️  build</span>
+          <span class="arrow">→</span>
+          <span class="step">🚀 push</span>
+        </div>
+      </section>
+
       <div class="actions">
         <button type="submit" id="save-btn">💾 Save</button>
         <span id="save-feedback" class="feedback"></span>

@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (key === 'apiKey' && value && masked) {
           el.dataset.masked = 'true';
         } else if (el.type === 'checkbox') {
-          el.checked = value;
+          el.checked = value === true || value === 'true';
         } else {
           el.value = value ?? '';
         }
@@ -55,11 +55,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     feedback.textContent = 'Saving...';
     feedback.className = 'feedback';
 
-    const formData = new FormData(form);
     const payload = {};
 
-    for (const [key, value] of formData.entries()) {
-      payload[key] = value;
+    // Text inputs
+    for (const el of form.querySelectorAll('input:not([type="checkbox"]), select, textarea')) {
+      if (el.name) payload[el.name] = el.value;
+    }
+
+    // Checkboxes (explicitly send true/false)
+    for (const el of form.querySelectorAll('input[type="checkbox"]')) {
+      if (el.name) payload[el.name] = el.checked;
     }
 
     try {

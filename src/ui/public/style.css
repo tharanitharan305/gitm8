@@ -213,3 +213,134 @@ footer code {
   font-family: var(--font);
   font-size: 0.75rem;
 }
+
+/* ── Badge ── */
+.badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-left: 0.3rem;
+}
+
+.section-hint {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-hint code {
+  background: var(--bg);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-family: var(--font);
+  font-size: 0.75rem;
+}
+
+/* ── Toggle rows ── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+
+.toggle-row:last-of-type {
+  border-bottom: none;
+}
+
+.toggle-info {
+  flex: 1;
+}
+
+.toggle-info label {
+  margin-bottom: 0.15rem;
+  font-size: 0.9rem;
+}
+
+/* ── Toggle switch ── */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--border);
+  border-radius: 24px;
+  transition: background 0.2s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: var(--text);
+  border-radius: 50%;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.toggle input:checked + .toggle-slider {
+  background: var(--accent);
+}
+
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+  background: #fff;
+}
+
+/* ── Pipeline visual ── */
+.pipeline-visual {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg);
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.pipeline-visual code {
+  font-family: var(--font);
+  color: var(--accent);
+  font-size: 0.8rem;
+}
+
+.arrow {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.step {
+  background: var(--surface);
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+}

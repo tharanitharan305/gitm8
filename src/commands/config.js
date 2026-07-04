@@ -44,7 +44,7 @@ export default async function configCommand(subcommand, args, opts) {
         console.error(picocolors.red('✖ Usage: gitm8 config set <key> <value>'));
         process.exit(1);
       }
-      const validKeys = ['apiBaseUrl', 'apiKey', 'model', 'tone', 'commitStyle', 'maxDiffChars', 'customTone'];
+      const validKeys = ['apiBaseUrl', 'apiKey', 'model', 'tone', 'commitStyle', 'maxDiffChars', 'customTone', 'pipelineSecretsScan', 'pipelinePrecheck', 'pipelineAutoPush'];
       if (!validKeys.includes(key)) {
         console.error(picocolors.red(`✖ Unknown key "${key}". Valid keys: ${validKeys.join(', ')}`));
         process.exit(1);
@@ -55,6 +55,16 @@ export default async function configCommand(subcommand, args, opts) {
         parsed = parseInt(value, 10);
         if (isNaN(parsed) || parsed < 1000 || parsed > 50000) {
           console.error(picocolors.red('✖ maxDiffChars must be a number between 1000 and 50000.'));
+          process.exit(1);
+        }
+      } else if (key.startsWith('pipeline')) {
+        // Boolean pipeline toggles
+        if (value === 'true' || value === '1' || value === 'yes') {
+          parsed = true;
+        } else if (value === 'false' || value === '0' || value === 'no') {
+          parsed = false;
+        } else {
+          console.error(picocolors.red(`✖ ${key} must be "true" or "false".`));
           process.exit(1);
         }
       }

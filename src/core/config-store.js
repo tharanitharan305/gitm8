@@ -32,6 +32,18 @@ const schema = {
     minimum: 1000,
     maximum: 50000,
   },
+  pipelineSecretsScan: {
+    type: 'boolean',
+    default: true,
+  },
+  pipelinePrecheck: {
+    type: 'boolean',
+    default: false,
+  },
+  pipelineAutoPush: {
+    type: 'boolean',
+    default: false,
+  },
 };
 
 const config = new Conf({
@@ -45,6 +57,9 @@ const config = new Conf({
     customTone: '',
     commitStyle: 'conventional',
     maxDiffChars: 6000,
+    pipelineSecretsScan: true,
+    pipelinePrecheck: false,
+    pipelineAutoPush: false,
   },
 });
 
