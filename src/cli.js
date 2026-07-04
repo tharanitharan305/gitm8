@@ -6,6 +6,7 @@ import commitCommand from './commands/commit.js';
 import pushCommand from './commands/push.js';
 import statusCommand from './commands/status.js';
 import configCommand from './commands/config.js';
+import precheckCommand from './commands/precheck.js';
 
 const pkg = { version: '1.0.0', description: 'AI-powered Git CLI wrapper' };
 
@@ -50,6 +51,14 @@ program
   .action(async () => {
     await requireRepo();
     await pushCommand();
+  });
+
+program
+  .command('precheck')
+  .description('Detect framework → run build → push on success')
+  .action(async () => {
+    await requireRepo();
+    await precheckCommand();
   });
 
 program

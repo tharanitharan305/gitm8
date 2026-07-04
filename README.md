@@ -42,6 +42,36 @@ The interactive prompt gives you options to:
 - `[t]` **Change tone** and regenerate
 - `[q]` **Quit** without committing
 
+### `gitm8 precheck`
+
+**Smart pre-push gate.** Detects your project framework → runs the build → offers to push on success.
+
+```bash
+gitm8 precheck
+```
+
+What it does:
+1. 🔍 **Detects** your framework (Node.js, Rust, Go, Python, .NET, Dart, Deno)
+2. 🏗️ **Runs** the appropriate build command (`npm run build`, `cargo build`, etc.)
+3. 📛 **Shows** your current branch name
+4. ✅ On **success** — asks: *"Push to `<branch>`?"* and pushes with one `[Y]`
+5. ❌ On **failure** — blocks the push and shows the build errors
+
+```
+📦 Precheck — Branch: feature/new-ui
+  Framework:  Node.js
+  Build:      running `npm run build`...
+
+> my-app@1.0.0 build
+> vite build
+
+✓ built in 2.3s
+
+✔ Build passed!
+
+? Push to feature/new-ui?  (Y/n)
+```
+
 ### `gitm8 push`
 
 Push the current branch to origin. Automatically sets upstream if needed.
