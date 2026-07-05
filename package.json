@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "start": "node bin/gitm8.js",
+    "test": "node --test test/*.test.js",
     "postinstall": "echo '✓ gitm8 installed! Run `gitm8 config --ui` or `gitm8 config set` to configure your AI provider.'"
   },
   "dependencies": {

@@ -10,6 +10,7 @@ import precheckCommand from './commands/precheck.js';
 import secretsScanCommand from './commands/secrets-scan.js';
 import vizCommand from './commands/viz.js';
 import depsCommand from './commands/deps.js';
+import whoCommand from './commands/who.js';
 
 const pkg = { version: '1.0.0', description: 'AI-powered Git CLI wrapper' };
 
@@ -84,6 +85,20 @@ program
   .description('Analyze layered architecture — UI → Controllers → Services → Data')
   .action(async () => {
     await depsCommand();
+  });
+
+program
+  .command('who')
+  .description('Show ownership and contribution insights for files, lines, or the repo')
+  .argument('[file]', 'File path, file:line, or "." for repo overview')
+  .option('--json', 'Machine-readable JSON output')
+  .option('--open', 'Open commit in browser if remote is configured')
+  .option('--history', 'Show full modification history')
+  .option('--stats', 'Show detailed ownership statistics')
+  .option('--verbose', 'Display raw Git metadata')
+  .action(async (file, opts) => {
+    // Commander passes the argument and options separately
+    await whoCommand(file, opts);
   });
 
 program

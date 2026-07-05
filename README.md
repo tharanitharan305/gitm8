@@ -28,8 +28,11 @@ npm install -g gitm8
 | 📝 **AI Commit Messages** | `gitm8 commit` | Generates smart commit messages from your staged diff |
 | 🏗️ **Pre-push Build Gate** | `gitm8 precheck` | Detects your framework, runs the build, blocks push on failure |
 | 📊 **Code Visualization** | `gitm8 viz` | Interactive D3.js class/method relationship diagram + call tree |
+| 🔗 **Layer Dependency Analysis** | `gitm8 deps` | Layered architecture diagram with violation detection |
+| 👤 **Git Ownership** | `gitm8 who` | Who owns a file, line, or the whole repo — 100% offline |
 | ⚙️ **Configurable Pipeline** | `gitm8 config --ui` | Link commit → scan → build → push into one automated flow |
 | 🚀 **Smart Push** | `gitm8 push` | Auto-sets upstream, no more `--set-upstream` |
+| 🎯 **Smart Add** | `gitm8 add` | Color-coded staging with change summary |
 | 🎨 **Colored Status** | `gitm8 status` | Beautiful, color-coded working tree status |
 
 ---
@@ -76,6 +79,124 @@ Scans your entire project (JS, TS/TSX, Python, Java, Dart), builds a class/metho
 - 🔌 **100% local** — no AI, no API calls, works fully offline
 
 > **Perfect for:** Onboarding to new codebases, refactoring with confidence, finding dead code, understanding Flutter widget trees, reviewing PR impacts.
+
+---
+
+## 🔗 Layer Dependency Analysis (`gitm8 deps`)
+
+```bash
+gitm8 deps
+```
+
+Understand your project's architecture at a glance — **automatically detects layers** and visualizes how they depend on each other.
+
+Scans every file (JS/TS/TSX, Python, Java, Dart), classifies them into architectural layers (UI → Controllers → Services → Repositories → Data → Utils), and opens an interactive D3.js **layered dependency diagram** in your browser:
+
+- 🏛️ **Layer bands** — color-coded horizontal bands for each architectural tier
+- 🔗 **Dependency arcs** — curved paths show which layers import what, with import counts
+- ⚠️ **Violation detection** — automatically flags architecture violations (e.g. UI directly importing Data)
+- 🖱 **Click any layer** — see violation details and the files involved
+- 🔍 **Hover links** — tooltips show source → target with specific file examples
+- 📁 **Counts at a glance** — files per layer, total dependencies, violation counts
+
+### Built-in Layer Rules
+
+| Layer | Color | Description |
+|-------|-------|-------------|
+| 🖥️ **UI (Pages/Components)** | 🔵 | React components, Flutter widgets, page files |
+| ⚡ **State / Controllers** | 🟢 | State management, BLoCs, Redux, hooks, commands |
+| 🔧 **Services / API** | 🟡 | API clients, external integrations |
+| 🗄️ **Repositories** | 🔴 | Data access layer, domain repositories |
+| 💾 **Data / Database** | 🟣 | Models, schemas, data sources |
+| 🧰 **Utils / Config** | 🩷 | Shared utilities, configuration, constants |
+
+**Architectural enforcement stops bad patterns early** — the violations panel highlights layer-skipping imports so you can refactor with confidence.
+
+> **Zero configuration** — it just works. No DSL, no config file, no setup.
+
+---
+
+## 👤 Git Ownership (`gitm8 who`)
+
+```bash
+gitm8 who <file>          # who owns a file
+gitm8 who <file>:<line>   # who wrote this line
+gitm8 who .               # who contributes to the repo
+```
+
+**100% offline** ownership and contribution analysis using only local Git history — no API keys, no network calls. Three modes:
+
+### File Mode
+
+```bash
+gitm8 who src/auth/auth.service.ts
+```
+
+Shows contributor ownership breakdown with visual bars:
+
+| Output | Description |
+|--------|-------------|
+| 👥 **Contributors** | Each author with commit count and ownership % |
+| 📊 **Visual bars** | Proportional commit bar per contributor |
+| 📅 **Created** | When the file first appeared in the repo |
+| 🔄 **Last Modified** | How long since the last change |
+
+### Line Mode
+
+```bash
+gitm8 who src/auth/auth.service.ts:128
+```
+
+Drills into a single line using `git blame`:
+
+| Output | Description |
+|--------|-------------|
+| 👤 **Author** | Who last touched this line |
+| 📧 **Email** | Author's commit email |
+| 🔖 **Commit** | Full commit SHA |
+| 📅 **Date** | When the commit was made |
+| 💬 **Message** | Commit message |
+| 📁 **Files changed** | All files in that commit |
+| 📊 **Insertions/Deletions** | Commit diff stats |
+| 📜 **History** | Line age, modification count, last change |
+
+### Repo Mode
+
+```bash
+gitm8 who .
+```
+
+Top-level repository overview:
+
+| Output | Description |
+|--------|-------------|
+| 🏆 **Top Contributors** | Sorted by commit count |
+| 📄 **Most Modified Files** | Files with the most commits |
+| 📁 **Most Active Directories** | Hotspot directories |
+| ⏱ **Recent Activity** | Latest commits with message preview |
+
+### Flags
+
+| Flag | Description |
+|------|-------------|
+| `--json` | Machine-readable JSON output |
+| `--open` | Open commit in browser (GitHub/GitLab) |
+| `--history` | Show full modification history |
+| `--stats` | Detailed ownership statistics |
+| `--verbose` | Raw Git metadata |
+
+### Interactive Mode
+
+```bash
+gitm8 who
+```
+
+No arguments launches an interactive TUI using `@clack/prompts`:
+
+- 👥 **Browse Contributors** — select a contributor → see recent commits
+- 📜 **Browse Commits** — pick a commit → see files changed + diff stats
+- 📄 **Browse Files** — select a file → see ownership breakdown
+- 🔍 **Blame a File** — enter any file path → see blame or ownership
 
 ---
 
@@ -201,7 +322,7 @@ npm install @tharanitharan305/gitm8
 - **Git** (any modern version)
 - An API key for **any** OpenAI-compatible provider (for commit generation)
 
-> Secrets scan, viz, precheck, and status all work **without any API key**.
+> Secrets scan, viz, deps, who, precheck, add, and status all work **without any API key**.
 
 ---
 
@@ -213,6 +334,9 @@ npm install @tharanitharan305/gitm8
 | "This commit message is useless" | 🤖 AI generates meaningful messages from your actual diff |
 | "Does this code even compile?" | 🏗️ Precheck builds before push |
 | "Where is this method called from?" | 📊 Viz shows an interactive caller graph |
+| "What layer depends on what?" | 🔗 Deps auto-detects architecture and violations |
+| "Who owns this file?" | 👤 Who shows contributor ownership offline |
+| "Who wrote this line?" | 👤 Who blames any line without an API key |
 | "I forgot to push" | 🚀 Auto-push after successful build |
 | "I run 5 commands every time" | ⚙️ One pipeline: scan → commit → build → push |
 | "New dev onboards slowly" | 🌳 Call tree shows architecture instantly |
@@ -225,6 +349,8 @@ npm install @tharanitharan305/gitm8
 - [x] Secrets scanner (30+ patterns, all local)
 - [x] Pre-push build check (multi-framework)
 - [x] Code visualization with D3.js + call tree
+- [x] Layer dependency analysis with violation detection
+- [x] Git ownership analysis (blame, contributors, repo overview)
 - [ ] Commit splitting (AI-suggested granular commits)
 - [ ] PR description generation from diff
 - [ ] Impact analysis ("this change affects N files")
