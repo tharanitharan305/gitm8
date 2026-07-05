@@ -11,6 +11,7 @@ import secretsScanCommand from './commands/secrets-scan.js';
 import vizCommand from './commands/viz.js';
 import depsCommand from './commands/deps.js';
 import whoCommand from './commands/who.js';
+import atlasCommand from './commands/atlas.js';
 
 const pkg = { version: '1.0.0', description: 'AI-powered Git CLI wrapper' };
 
@@ -99,6 +100,20 @@ program
   .action(async (file, opts) => {
     // Commander passes the argument and options separately
     await whoCommand(file, opts);
+  });
+
+program
+  .command('atlas')
+  .description('Interactive repository intelligence platform — graph, hotspots, timeline, layers')
+  .option('--headless', 'Do not open browser')
+  .option('--export <format>', 'Export mode: json, mermaid, svg')
+  .option('--output <file>', 'Output file for export (use "-" for stdout)')
+  .option('--watch', 'Watch files for changes and live-update the UI')
+  .option('--no-cache', 'Force re-indexing from scratch')
+  .option('--verbose', 'Show detailed progress information')
+  .option('--view <name>', 'Open a specific view: report, architecture, layers, callflow, hotspots, timeline')
+  .action(async (opts) => {
+    await atlasCommand(opts);
   });
 
 program

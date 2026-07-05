@@ -45,7 +45,11 @@
       "Bash(node -e \"const d=JSON.parse\\(require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\)\\); console.log\\('File mode: OK | contributors:', d.contributors.length, '| commits:', d.totalCommits\\)\")",
       "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('who-final.json','utf8'\\); const j=JSON.parse\\(d.trim\\(\\)\\); console.log\\('File mode: OK | contributors:', j.contributors.length, '| commits:', j.totalCommits\\)\")",
       "Bash(del who-final.json)",
-      "Bash(node src/cli.js who src/cli.js:999999)"
+      "Bash(node src/cli.js who src/cli.js:999999)",
+      "Bash(findstr /C:\"atlas\")",
+      "Bash(node -e \"import\\('../../src/cli.js'\\).catch\\(e => console.error\\(e.message, e.stack?.split\\('\\\\n'\\).slice\\(0,5\\).join\\('\\\\n'\\)\\)\\)\")",
+      "Bash(node src/cli.js atlas --help)",
+      "Bash(timeout 15 node src/cli.js atlas --headless --view report)"
     ]
   }
 }
