@@ -53,7 +53,8 @@
       "Bash(npm test *)",
       "Bash(node bin/gitm8.js go --help)",
       "Bash(node -e \"import\\('./src/core/pipeline.js'\\).then\\(m => console.log\\('pipeline module OK, runPipeline:', typeof m.runPipeline\\)\\).catch\\(e => console.error\\(e\\)\\)\")",
-      "Bash(timeout 5 node -e ' *)"
+      "Bash(timeout 5 node -e ' *)",
+      "Bash(grep -c '```' README.md)"
     ]
   }
 }

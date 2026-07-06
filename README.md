@@ -36,6 +36,7 @@ npm install -g gitm8
   - [`gitm8 secrets-scan`](#gitm8-secrets-scan)
   - [`gitm8 viz`](#gitm8-viz)
   - [`gitm8 deps`](#gitm8-deps)
+  - [`gitm8 go`](#gitm8-go)
   - [`gitm8 who`](#gitm8-who)
   - [`gitm8 atlas`](#gitm8-atlas)
   - [`gitm8 config`](#gitm8-config)
@@ -508,6 +509,99 @@ $ gitm8 deps
 
 ---
 
+### `gitm8 go`
+
+Run your configured pipeline — a customizable chain of steps that takes you from staging to push in one command.
+
+```bash
+gitm8 go                  # run the pipeline, prompts for manual steps
+gitm8 go -y               # run everything auto, skip all prompts
+```
+
+**What it does:**
+
+The `go` command executes the steps you've configured in `pipelineSteps`. Each step has a **mode**:
+
+| Mode | Behavior |
+|------|----------|
+| `auto` | Runs without asking — you see output and can Ctrl+C if needed |
+| `manual` | Pauses and asks for confirmation before proceeding |
+
+**Default pipeline:**
+
+```
+📂 Add     →  🔐 Scan     →  📝 Commit     →  🏗️  Precheck     →  🚀 Push
+(auto)        (auto)          (manual)          (auto)            (manual)
+```
+
+**Step reference:**
+
+| Step | Icon | What It Does | Auto Safe? |
+|------|------|-------------|------------|
+| `add` | 📂 | Stages all changes (`git add .`) | ✅ Yes |
+| `secrets-scan` | 🔐 | Scans staged files for 30+ API keys, tokens, and credentials (100% local) | ✅ Yes |
+| `commit` | 📝 | Generates AI commit message and commits | ⚠️ Use `-y` to skip review |
+| `precheck` | 🏗️ | Auto-detects framework, runs build, reports pass/fail | ✅ Yes |
+| `push` | 🚀 | Pushes to remote, auto-sets upstream | ⚠️ Use `-y` to skip confirmation |
+
+**Interactive pipeline in action:**
+
+When you run `gitm8 go`, the pipeline shows a live progress view:
+
+```
+⚡ gitm8 pipeline — 5 steps
+
+  📂 Add ……………………………… ✔  (auto)
+  🔐 Secrets scan ……………… ✔  (auto)
+  📝 Commit …………………… ▶  (manual)
+     └─ Review the generated commit message…
+     └─ [Enter] accept  [e] edit  [r] regen  [q] quit
+```
+
+Each manual step pauses and shows you exactly what's about to happen so you stay in control.
+
+**Configure your pipeline:**
+
+Use the web UI drag & drop builder (recommended):
+
+```bash
+gitm8 config --ui
+```
+
+The **Pipeline Builder** section lets you:
+- Drag steps to reorder
+- Click 🗑️ to remove a step
+- Click palette buttons to add steps
+- Toggle `auto` / `manual` mode per step
+- Hit **Save** to persist
+- Hit **▶ Run** to execute immediately
+
+Or configure via CLI:
+
+```bash
+# Reset to default pipeline
+gitm8 config set pipelineSteps '[
+  {"step":"add","mode":"auto","config":{"files":"."}},
+  {"step":"secrets-scan","mode":"auto"},
+  {"step":"commit","mode":"manual"},
+  {"step":"precheck","mode":"auto"},
+  {"step":"push","mode":"manual"}
+]'
+
+# A minimal auto-pipeline (no prompts)
+gitm8 config set pipelineSteps '[
+  {"step":"add","mode":"auto","config":{"files":"."}},
+  {"step":"commit","mode":"auto"},
+  {"step":"push","mode":"auto"}
+]'
+gitm8 config set apiKey sk-...   # still needed for AI commits
+gitm8 go                         # all auto, no prompts
+```
+
+> **Tip:** Use `gitm8 go -y` to run every step in `auto` mode regardless of its configured mode. Great for CI or when you're confident everything is clean.
+
+---
+
 ### `gitm8 who`
 
 Git ownership and contribution analysis — works 100% offline using only local Git history.
@@ -709,38 +803,124 @@ Opens a self-contained web interface on `http://localhost:PORT` with:
 
 ## The Pipeline
 
-The pipeline is the heart of `gitm8 commit`. It chains multiple stages into one automated flow:
+The pipeline chains multiple Git operations into a single automated workflow. You build it — step by step — and run it with `gitm8 go`.
 
-```mermaid
-flowchart LR
-    A["🔐 Secrets Scan<br/><i>default: ON</i>"] --> B["✍️ AI Commit<br/><i>always runs</i>"]
-    B --> C["🏗️ Build Check<br/><i>default: OFF</i>"]
-    C --> D["🚀 Auto Push<br/><i>default: OFF</i>"]
-```
+### Pipeline Builder (Web UI)
 
-Each stage is independently configurable:
+Open the visual drag & drop builder:
 
-| Pipeline Stage | Config Key | Default | Description |
-|---------------|-----------|---------|-------------|
-| 🔐 Secrets Scan | `pipelineSecretsScan` | `true` | Scans staged files for 30+ secret patterns |
-| 🏗️ Build Check | `pipelinePrecheck` | `false` | Auto-detects framework and runs build |
-| 🚀 Auto-Push | `pipelineAutoPush` | `false` | Pushes to upstream after successful commit+build |
-
-**Behavior:**
-- If **Secrets Scan** finds critical/high secrets: prompts to unstage, continue, or cancel
-- If **Build Check** fails: the commit still goes through, but push is blocked with an error
-- If **Auto-Push** is enabled but build fails: push is skipped with a warning
-
-Configure via CLI:
-```bash
-gitm8 config set pipelinePrecheck true
-gitm8 config set pipelineAutoPush true
-```
-
-Or via the web UI:
 ```bash
 gitm8 config --ui
 ```
+
+The **Pipeline Builder** section shows:
+
+```
+┌────────────────────────────────────────────┐
+│  Pipeline                    drag & drop    │
+│                                             │
+│  ┌─────────────────────────────────────┐    │
+│  │ ☰ 📂 Add (auto)                   │    │
+│  │ ☰ 🔐 Secrets Scan (auto)          │    │
+│  │ ☰ 📝 Commit (manual)              │    │
+│  │ ☰ 🏗️  Precheck (auto)             │    │
+│  │ ☰ 🚀 Push (manual)                │    │
+│  └─────────────────────────────────────┘    │
+│                                             │
+│  Add steps: [📂 Add] [🔐 Scan] [📝 Commit]  │
+│             [🏗️  Precheck] [🚀 Push]        │
+│                                             │
+│  [💾 Save Pipeline]  [▶ Run Pipeline]       │
+└────────────────────────────────────────────┘
+```
+
+- **Drag** ☰ handles to reorder steps
+- **Click** 🗑️ to remove a step
+- **Click** palette buttons to add a step
+- **Toggle** `auto` / `manual` per step
+- **💾 Save** persists your pipeline
+- **▶ Run** executes it immediately (terminal output)
+
+### Step Reference
+
+| Step | Icon | Function | Default Mode |
+|------|------|----------|-------------|
+| `add` | 📂 | Stage all changes (`git add .`) | `auto` |
+| `secrets-scan` | 🔐 | Scan staged files for 30+ secrets (100% local) | `auto` |
+| `commit` | 📝 | Generate AI commit message and commit | `manual` |
+| `precheck` | 🏗️ | Detect framework → run build → report pass/fail | `auto` |
+| `push` | 🚀 | Push to remote (auto-sets upstream) | `manual` |
+
+### Mode: auto vs manual
+
+| Mode | Behavior |
+|------|----------|
+| `auto` | Runs silently — you see output and can Ctrl+C to abort |
+| `manual` | Pauses with a prompt: confirm or skip this step |
+
+### Pipeline Flow
+
+```mermaid
+flowchart LR
+    A["📂 Add<br/><i>stages changes</i>"] --> B["🔐 Secrets Scan<br/><i>local, no network</i>"]
+    B -->|"secrets found"| C{"User action"}
+    C -->|Unstage| D[Remove flagged files]
+    C -->|Continue| E["📝 Commit<br/><i>AI generates message</i>"]
+    C -->|Cancel| F[Exit]
+    D --> E
+    B -->|"clean"| E
+    E -->|"manual mode"| G{Review message?}
+    G -->|Accept| H["🏗️  Precheck<br/><i>framework + build</i>"]
+    G -->|Edit| I[Edit message]
+    G -->|Regen| E
+    I --> H
+    H -->|"build fails"| J{Warn & continue?}
+    J -->|Yes| K["🚀 Push<br/><i>to remote</i>"]
+    J -->|No| L[Done]
+    H -->|"build passes"| K
+    K -->|"manual mode"| M{Confirm push?}
+    M -->|Yes| N[Pushed ✅]
+    M -->|No| O[Cancelled]
+```
+
+### Configuration
+
+Configure pipeline steps via CLI:
+
+```bash
+# Default pipeline (5 steps)
+gitm8 config set pipelineSteps '[
+  {"step":"add","mode":"auto","config":{"files":"."}},
+  {"step":"secrets-scan","mode":"auto"},
+  {"step":"commit","mode":"manual"},
+  {"step":"precheck","mode":"auto"},
+  {"step":"push","mode":"manual"}
+]'
+
+# Minimal auto pipeline (no prompts)
+gitm8 config set pipelineSteps '[
+  {"step":"add","mode":"auto"},
+  {"step":"commit","mode":"auto"},
+  {"step":"push","mode":"auto"}
+]'
+
+# Just commit + push
+gitm8 config set pipelineSteps '[
+  {"step":"commit","mode":"manual"},
+  {"step":"push","mode":"manual"}
+]'
+```
+
+You can also toggle individual stages via quick config keys (for backward compatibility):
+
+| Config Key | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `pipelineSecretsScan` | boolean | `true` | Enable secrets scan in pipeline |
+| `pipelinePrecheck` | boolean | `false` | Enable build check in pipeline |
+| `pipelineAutoPush` | boolean | `false` | Enable auto-push in pipeline |
+| `pipelineSteps` | array | default 5-step | Full custom step list |
+
+> **Note:** The quick toggles (`pipelineSecretsScan`, etc.) are overridden if `pipelineSteps` is explicitly set. Use the web UI or set `pipelineSteps` directly for full control.
 
 ---
 
