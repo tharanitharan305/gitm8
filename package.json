@@ -12,7 +12,7 @@
   "files": [
     "bin/",
     "src/",
-    "README.md"
+    "README.md" 
   ],
   "scripts": {
     "start": "node bin/gitm8.js",

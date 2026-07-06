@@ -18,7 +18,7 @@ export async function isInRepo() {
  * @param {string[]} files
  * @returns {Promise<{stdout: string, stderr: string}>}
  */
-export async function add(files) {
+export async function add(files = []) {
   const args = files.length > 0 ? ['add', ...files] : ['add', '.'];
   return execa('git', args);
 }

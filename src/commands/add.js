@@ -6,7 +6,7 @@ import { add, getStagedSummary } from '../core/git.js';
  * @param {string[]} files
  * @param {object} opts
  */
-export default async function addCommand(files, opts) {
+export default async function addCommand(files = [], opts) {
   const { stdout, stderr } = await add(files);
 
   // Show colored summary of staged files

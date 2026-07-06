@@ -37,6 +37,7 @@ export async function startServer() {
       'apiBaseUrl', 'apiKey', 'model', 'tone', 'customTone',
       'commitStyle', 'maxDiffChars',
       'pipelineSecretsScan', 'pipelinePrecheck', 'pipelineAutoPush',
+      'pipelineSteps',
     ];
 
     for (const key of allowedKeys) {
@@ -58,6 +59,22 @@ export async function startServer() {
     }
 
     res.json({ status: 'ok', message: 'Configuration saved.' });
+  });
+
+  // ── Pipeline run endpoint ──────────────────────────────────
+  app.post('/api/pipeline/run', async (req, res) => {
+    // Respond immediately — pipeline runs in the background
+    res.json({ status: 'started', message: 'Pipeline launched — check your terminal for output' });
+
+    console.log(picocolors.cyan('\n⚡ Pipeline started from web UI (auto mode)'));
+    try {
+      const { runPipeline } = await import('../core/pipeline.js');
+      // Force auto mode — the web UI can't handle interactive @clack prompts
+      await runPipeline({ yes: true });
+      console.log(picocolors.green('✔ Pipeline finished'));
+    } catch (err) {
+      console.error(picocolors.red(`✖ Pipeline error: ${err.message}`));
+    }
   });
 
   // Start on a random available port

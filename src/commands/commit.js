@@ -17,7 +17,7 @@ import { detectFramework } from '../core/scanner.js';
  * @param {boolean} opts.yes
  */
 export default async function commitCommand(opts) {
-  const { dryRun = false, yes = false } = opts;
+  const { dryRun = false, yes = false, pipeline = false } = opts;
 
   // ── Stage 1: Check for staged changes ─────────────────────
   let diff = await getStagedDiff();
@@ -30,7 +30,7 @@ export default async function commitCommand(opts) {
   }
 
   // ── Stage 2: Secrets scan (pipeline toggle) ───────────────
-  if (get('pipelineSecretsScan') !== false) {
+  if (!pipeline && get('pipelineSecretsScan') !== false) {
     const scanAborted = await runSecretsScan();
     if (scanAborted) return;
 
@@ -126,15 +126,15 @@ export default async function commitCommand(opts) {
   // ── Stage 5: Precheck (build) — pipeline toggle ────────────
   // Runs automatically when enabled — no prompt
   let precheckPassed = true;
-  if (get('pipelinePrecheck') === true) {
+  if (!pipeline && get('pipelinePrecheck') === true) {
     precheckPassed = await runPrecheck();
   }
 
   // ── Stage 6: Auto push — pipeline toggle ───────────────────
   // Only pushes if precheck passed (or was skipped)
-  if (get('pipelineAutoPush') === true && precheckPassed) {
+  if (!pipeline && get('pipelineAutoPush') === true && precheckPassed) {
     await runAutoPush();
-  } else if (get('pipelineAutoPush') === true && !precheckPassed) {
+  } else if (!pipeline && get('pipelineAutoPush') === true && !precheckPassed) {
     console.log(picocolors.yellow('\n⚠ Auto-push skipped because the build failed.'));
     console.log(picocolors.dim('  Fix the issues and push manually:'));
     console.log(picocolors.dim('    gitm8 push'));

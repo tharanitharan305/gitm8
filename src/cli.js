@@ -6,6 +6,7 @@ import commitCommand from './commands/commit.js';
 import pushCommand from './commands/push.js';
 import statusCommand from './commands/status.js';
 import configCommand from './commands/config.js';
+import pipelineCommand from './commands/pipeline.js';
 import precheckCommand from './commands/precheck.js';
 import secretsScanCommand from './commands/secrets-scan.js';
 import vizCommand from './commands/viz.js';
@@ -114,6 +115,15 @@ program
   .option('--view <name>', 'Open a specific view: report, architecture, layers, callflow, hotspots, timeline')
   .action(async (opts) => {
     await atlasCommand(opts);
+  });
+
+program
+  .command('go')
+  .description('Run your configured pipeline — add → scan → commit → precheck → push')
+  .option('-y, --yes', 'Skip all manual prompts, run everything auto')
+  .action(async (opts) => {
+    await requireRepo();
+    await pipelineCommand(opts);
   });
 
 program

@@ -344,3 +344,213 @@ footer code {
   color: var(--text-dim);
   font-size: 0.7rem;
 }
+
+/* ── Pipeline Builder ── */
+.pipeline-dropzone {
+  min-height: 80px;
+  margin-bottom: 0.75rem;
+}
+
+.pipeline-dropzone--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pipeline-empty {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-style: italic;
+  padding: 1.5rem 0;
+}
+
+.pipeline-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.7rem;
+  margin-bottom: 0.35rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: grab;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  user-select: none;
+}
+
+.pipeline-card:hover {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+}
+
+.pipeline-card.dragging {
+  opacity: 0.4;
+  border-style: dashed;
+}
+
+.pipeline-card.drag-over {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.pipeline-card-drag {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.pipeline-card-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.pipeline-card-name {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.pipeline-card-mode {
+  width: auto;
+  min-width: 80px;
+  padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.75rem;
+  font-family: var(--font);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238b90a5' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.4rem center;
+  outline: none;
+}
+
+.pipeline-card-mode:focus {
+  border-color: var(--accent);
+}
+
+.pipeline-card-remove {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.15rem 0.3rem;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.pipeline-card-remove:hover {
+  color: var(--error);
+  background: rgba(248, 113, 113, 0.1);
+}
+
+/* ── Palette ── */
+.pipeline-palette {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 0.75rem;
+}
+
+.palette-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-right: 0.25rem;
+  font-weight: 500;
+}
+
+.palette-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+  font-family: var(--font);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.palette-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+}
+
+.palette-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── Pipeline actions ── */
+.pipeline-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-run {
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-run:hover {
+  background: #16a34a;
+}
+
+.btn-run:active {
+  transform: scale(0.98);
+}
+
+.btn-run:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#pipeline-feedback {
+  font-size: 0.8rem;
+}

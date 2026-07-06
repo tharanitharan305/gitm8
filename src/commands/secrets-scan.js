@@ -20,8 +20,12 @@ const SEVERITY_LABELS = {
 /**
  * `gitm8 secrets-scan`
  * Scan staged files for secrets, API keys, tokens, and credentials.
+ *
+ * @param {object} [opts]
+ * @param {boolean} [opts.ci]  Non-interactive mode — fail on critical/high
  */
-export default async function secretsScanCommand() {
+export default async function secretsScanCommand(opts = {}) {
+  const { ci = false } = opts;
   console.log('');
   console.log(picocolors.bold(picocolors.magenta('🔐 Secrets Scan')));
   console.log(picocolors.dim('  Scanning staged files for secrets, keys, and credentials...'));
@@ -95,6 +99,18 @@ export default async function secretsScanCommand() {
   // ── Interactive action prompt ───────────────────────────────
   if (criticalCount > 0 || highCount > 0) {
     console.log('');
+
+    // CI mode: fail on critical, warn on high, no prompts
+    if (ci) {
+      console.log(picocolors.dim('  (CI mode — non-interactive)'));
+      if (criticalCount > 0) {
+        console.log(picocolors.red(`\n✖ ${criticalCount} critical secret${criticalCount > 1 ? 's' : ''} found.`));
+        process.exit(1);
+      }
+      console.log(picocolors.yellow(`\n⚠  ${highCount} high-severity finding${highCount > 1 ? 's' : ''} — continuing`));
+      return;
+    }
+
     const action = await clack.select({
       message: criticalCount > 0
         ? picocolors.red('Critical secrets found! What would you like to do?')

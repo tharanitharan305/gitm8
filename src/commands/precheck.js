@@ -8,7 +8,8 @@ import { getCurrentBranch, push, hasUpstream } from '../core/git.js';
  * `gitm8 precheck`
  * Detect framework → run build → on success, offer quick push.
  */
-export default async function precheckCommand() {
+export default async function precheckCommand(opts = {}) {
+  const { pipeline = false } = opts;
   // ── 1. Branch info ──────────────────────────────────────────
   const branch = await getCurrentBranch();
   console.log('');
@@ -23,7 +24,7 @@ export default async function precheckCommand() {
     // No build step — offer push directly if there's a build-less framework
     console.log(`  ${picocolors.dim('Build:')}     ${picocolors.yellow('skipped (no standard build step)')}`);
     console.log(picocolors.dim('─'.repeat(50)) + '\n');
-    await offerPush(branch);
+    if (!pipeline) await offerPush(branch);
     return;
   }
 
@@ -46,7 +47,7 @@ export default async function precheckCommand() {
   console.log(picocolors.green('✔ Build passed!'));
   console.log(picocolors.dim('─'.repeat(50)) + '\n');
 
-  await offerPush(branch);
+  if (!pipeline) await offerPush(branch);
 }
 
 /**

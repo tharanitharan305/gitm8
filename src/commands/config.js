@@ -44,7 +44,7 @@ export default async function configCommand(subcommand, args, opts) {
         console.error(picocolors.red('✖ Usage: gitm8 config set <key> <value>'));
         process.exit(1);
       }
-      const validKeys = ['apiBaseUrl', 'apiKey', 'model', 'tone', 'commitStyle', 'maxDiffChars', 'customTone', 'pipelineSecretsScan', 'pipelinePrecheck', 'pipelineAutoPush'];
+      const validKeys = ['apiBaseUrl', 'apiKey', 'model', 'tone', 'commitStyle', 'maxDiffChars', 'customTone', 'pipelineSecretsScan', 'pipelinePrecheck', 'pipelineAutoPush', 'pipelineSteps'];
       if (!validKeys.includes(key)) {
         console.error(picocolors.red(`✖ Unknown key "${key}". Valid keys: ${validKeys.join(', ')}`));
         process.exit(1);

@@ -49,7 +49,11 @@
       "Bash(findstr /C:\"atlas\")",
       "Bash(node -e \"import\\('../../src/cli.js'\\).catch\\(e => console.error\\(e.message, e.stack?.split\\('\\\\n'\\).slice\\(0,5\\).join\\('\\\\n'\\)\\)\\)\")",
       "Bash(node src/cli.js atlas --help)",
-      "Bash(timeout 15 node src/cli.js atlas --headless --view report)"
+      "Bash(timeout 15 node src/cli.js atlas --headless --view report)",
+      "Bash(npm test *)",
+      "Bash(node bin/gitm8.js go --help)",
+      "Bash(node -e \"import\\('./src/core/pipeline.js'\\).then\\(m => console.log\\('pipeline module OK, runPipeline:', typeof m.runPipeline\\)\\).catch\\(e => console.error\\(e\\)\\)\")",
+      "Bash(timeout 5 node -e ' *)"
     ]
   }
 }

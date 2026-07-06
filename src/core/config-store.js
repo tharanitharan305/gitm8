@@ -44,6 +44,16 @@ const schema = {
     type: 'boolean',
     default: false,
   },
+  pipelineSteps: {
+    type: 'array',
+    default: [
+      { step: 'add', mode: 'auto', config: { files: '.' } },
+      { step: 'secrets-scan', mode: 'auto' },
+      { step: 'commit', mode: 'manual' },
+      { step: 'precheck', mode: 'auto' },
+      { step: 'push', mode: 'manual' },
+    ],
+  },
 };
 
 const config = new Conf({
@@ -60,6 +70,13 @@ const config = new Conf({
     pipelineSecretsScan: true,
     pipelinePrecheck: false,
     pipelineAutoPush: false,
+    pipelineSteps: [
+      { step: 'add', mode: 'auto', config: { files: '.' } },
+      { step: 'secrets-scan', mode: 'auto' },
+      { step: 'commit', mode: 'manual' },
+      { step: 'precheck', mode: 'auto' },
+      { step: 'push', mode: 'manual' },
+    ],
   },
 });
 
