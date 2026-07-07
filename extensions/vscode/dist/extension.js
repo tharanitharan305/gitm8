@@ -54,6 +54,8 @@ let debounceTimer;
  */
 async function activate(context) {
     console.log('[gitm8] Activating extension...');
+    console.log("🚀 GitM8 Extension Activated");
+    vscode.window.showInformationMessage("GitM8 Extension Activated");
     // ── Initialize secrets storage ──
     (0, secrets_1.initSecrets)(context);
     // ── Create status bar ──

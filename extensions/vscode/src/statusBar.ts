@@ -15,7 +15,7 @@ export class StatusBarManager {
     // ── Go button ──
     this.goItem = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Right,
-      100
+      -1
     );
     this.goItem.text = '$(debug-start) Go';
     this.goItem.tooltip = 'gitm8: Run pipeline (add → commit → push)';
@@ -25,7 +25,7 @@ export class StatusBarManager {
     // ── Pull button ──
     this.pullItem = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Right,
-      99
+      -2
     );
     this.pullItem.text = '$(arrow-down) Pull';
     this.pullItem.tooltip = 'git pull current branch';
@@ -34,7 +34,7 @@ export class StatusBarManager {
     // ── Branch button ──
     this.branchItem = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Right,
-      98
+      -3
     );
     this.branchItem.text = '$(git-branch) Branch';
     this.branchItem.tooltip = 'gitm8: Create a new branch from a base';
@@ -43,7 +43,7 @@ export class StatusBarManager {
     // ── Publish button ──
     this.publishItem = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Right,
-      97
+      -4
     );
     this.publishItem.text = '$(cloud-upload) Publish';
     this.publishItem.tooltip = 'gitm8: Push branch + create PR';

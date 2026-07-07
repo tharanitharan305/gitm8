@@ -1,61 +1,483 @@
-# gitm8 — VS Code Extension
+# gitm8 🤖
 
-AI-powered Git workflow right from your VS Code status bar.
+> AI-powered Git workflow directly inside Visual Studio Code.
 
-## Features
+<!-- ![Hero Banner](./hero.png)
 
-- **▶ Go** — Run the full `gitm8` pipeline (add → commit → push) with one click
-- **⬇ Pull** — Git pull current branch
-- **🌿 Branch** — Interactive branch creation: pick a base branch, name your new branch
-- **🚀 Publish** — Push + set upstream + optional PR creation via `gh`
-- **⚙ Config** — Manage API key, model, tone, and pipeline settings inside VS Code
+[![Marketplace Version](...)]
+[![Downloads](...)]
+[![Rating](...)]
+[![License](...)] -->
 
-All buttons are in the status bar at the bottom of VS Code. All commands are also available via `Ctrl+Shift+P`.
+---
 
-## Requirements
+## ✨ Why gitm8?
 
-- **gitm8 CLI** (`npm install -g gitm8`) — the extension detects it automatically
-- VS Code 1.85+
+Stop switching between the terminal and VS Code.
 
-## Extension Settings
+gitm8 brings your entire Git workflow into the VS Code status bar with AI assistance.
 
-This extension contributes the following settings:
+✔ AI Commit Messages
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `gitm8.apiBaseUrl` | `https://api.openai.com/v1` | AI provider API endpoint |
-| `gitm8.model` | `gpt-4o-mini` | AI model for commit messages |
-| `gitm8.tone` | `concise` | Commit message tone |
-| `gitm8.commitStyle` | `conventional` | Commit format (conventional/freeform) |
-| `gitm8.maxDiffChars` | `6000` | Max diff chars sent to AI |
-| `gitm8.pipelinePrecheck` | `false` | Run build precheck in pipeline |
-| `gitm8.pipelineAutoPush` | `false` | Auto-push after commit |
+✔ One-click Git Pipeline
 
-**API Key** is stored securely in VS Code's SecretStorage (not in a config file).
+✔ Interactive Branch Creation
 
-## Commands
+✔ Smart Publish
 
-| Command | Description |
-|---------|-------------|
-| `gitm8: Run Pipeline (Go)` | Run gitm8 go |
-| `gitm8: Pull Current Branch` | Git pull |
-| `gitm8: Create Branch` | Interactive branch creation |
-| `gitm8: Publish Branch (Push + PR)` | Push and optionally create PR |
-| `gitm8: Open Configuration` | Open settings panel |
+✔ Secure API Key Storage
 
-## Development
+✔ Beautiful VS Code Integration
+
+---
+
+<!-- ## 🎥 See it in action
+
+> GIF showing the entire workflow
+
+![Demo](images/demo.gif)
+
+--- -->
+
+# 🚀 Features
+
+## ▶ One Click Pipeline
+
+Run
+
+```
+git add
+git commit
+git push
+```
+
+with a single click.
+
+Image:
+pipeline.png
+
+---
+
+## 🤖 AI Commit Messages
+
+Generate meaningful commit messages using your preferred AI model.
+
+Supports
+
+- OpenAI
+- OpenRouter
+- Ollama
+- LM Studio
+- Any OpenAI-compatible API
+
+Image:
+commit.png
+
+---
+
+## 🌿 Smart Branch Creation
+
+Create branches interactively.
+
+Choose:
+
+- base branch
+- branch name
+
+without remembering Git commands.
+
+Image:
+branch.png
+
+---
+
+## 🚀 Publish
+
+Publish current branch
+
+Automatically
+
+- push
+- set upstream
+- optionally create PR
+
+Image:
+publish.png
+
+---
+
+## ⚙ Configuration
+
+Manage
+
+- API Key
+- Model
+- Tone
+- Pipeline
+
+without leaving VS Code.
+
+Image:
+config.png
+
+---
+
+<!-- # 📷 Screenshots
+
+Status Bar
+
+![Status](images/statusbar.png)
+
+Configuration
+
+![Config](images/config.png)
+
+Branch Creation
+
+![Branch](images/branch.png)
+
+--- -->
+
+# 📦 Installation
+
+## 1
+
+Install CLI
 
 ```bash
-# Install dependencies
-cd extensions/vscode
-npm install
-
-# Compile
-npm run compile
-
-# Run in VS Code Extension Host
-code . && press F5
-
-# Package
-npm run package
+npm install -g gitm8
 ```
+
+---
+
+## 2
+
+Install VS Code Extension
+
+Marketplace
+
+or
+
+VSIX
+
+---
+
+## 3
+
+Configure API Key
+
+Open
+
+```
+GitM8: Open Configuration
+```
+
+Done.
+
+---
+
+# ⚡ Quick Start
+
+Click
+
+▶ Go
+
+or
+
+```
+Ctrl+Shift+P
+# gitm8 🤖
+
+> AI-powered Git workflow directly inside Visual Studio Code.
+
+![Hero Banner](images/banner.png)
+
+[![Marketplace Version](...)]
+[![Downloads](...)]
+[![Rating](...)]
+[![License](...)]
+
+---
+
+## ✨ Why gitm8?
+
+Stop switching between the terminal and VS Code.
+
+gitm8 brings your entire Git workflow into the VS Code status bar with AI assistance.
+
+✔ AI Commit Messages
+
+✔ One-click Git Pipeline
+
+✔ Interactive Branch Creation
+
+✔ Smart Publish
+
+✔ Secure API Key Storage
+
+✔ Beautiful VS Code Integration
+
+---
+
+## 🎥 See it in action
+
+> GIF showing the entire workflow
+
+![Demo](images/demo.gif)
+
+---
+
+# 🚀 Features
+
+## ▶ One Click Pipeline
+
+Run
+
+```
+git add
+git commit
+git push
+```
+
+with a single click.
+
+Image:
+pipeline.png
+
+---
+
+## 🤖 AI Commit Messages
+
+Generate meaningful commit messages using your preferred AI model.
+
+Supports
+
+- OpenAI
+- OpenRouter
+- Ollama
+- LM Studio
+- Any OpenAI-compatible API
+
+Image:
+commit.png
+
+---
+
+## 🌿 Smart Branch Creation
+
+Create branches interactively.
+
+Choose:
+
+- base branch
+- branch name
+
+without remembering Git commands.
+
+Image:
+branch.png
+
+---
+
+## 🚀 Publish
+
+Publish current branch
+
+Automatically
+
+- push
+- set upstream
+- optionally create PR
+
+Image:
+publish.png
+
+---
+
+## ⚙ Configuration
+
+Manage
+
+- API Key
+- Model
+- Tone
+- Pipeline
+
+without leaving VS Code.
+
+Image:
+config.png
+
+---
+
+# 📷 Screenshots
+
+Status Bar
+
+![Status](images/statusbar.png)
+
+Configuration
+
+![Config](images/config.png)
+
+Branch Creation
+
+![Branch](images/branch.png)
+
+---
+
+# 📦 Installation
+
+## 1
+
+Install CLI
+
+```bash
+npm install -g gitm8
+```
+
+---
+
+## 2
+
+Install VS Code Extension
+
+Marketplace
+
+or
+
+VSIX
+
+---
+
+## 3
+
+Configure API Key
+
+Open
+
+```
+GitM8: Open Configuration
+```
+
+Done.
+
+---
+
+# ⚡ Quick Start
+
+Click
+
+▶ Go
+
+or
+
+```
+Ctrl+Shift+P
+
+GitM8: Run Pipeline
+```
+
+That's it.
+
+---
+
+# ⚙ Settings
+
+| Setting | Description | Default |
+|----------|-------------|---------|
+| apiBaseUrl | AI endpoint | OpenAI |
+| model | AI model | gpt-4o-mini |
+| tone | Commit tone | concise |
+| commitStyle | Commit format | conventional |
+| pipelinePrecheck | Build before push | false |
+| pipelineAutoPush | Push automatically | false |
+
+---
+
+# ⌨ Commands
+
+| Command | Description |
+|----------|-------------|
+| Go | Full pipeline |
+| Pull | Pull branch |
+| Branch | Create branch |
+| Publish | Push + PR |
+| Config | Open settings |
+
+---
+
+# 🔒 Security
+
+Your API key is stored securely using
+
+VS Code SecretStorage.
+
+No plaintext configuration files.
+
+---
+
+# Requirements
+
+- VS Code 1.85+
+- gitm8 CLI
+- Git
+
+---
+
+# License
+
+MIT
+GitM8: Run Pipeline
+```
+
+That's it.
+
+---
+
+# ⚙ Settings
+
+| Setting | Description | Default |
+|----------|-------------|---------|
+| apiBaseUrl | AI endpoint | OpenAI |
+| model | AI model | gpt-4o-mini |
+| tone | Commit tone | concise |
+| commitStyle | Commit format | conventional |
+| pipelinePrecheck | Build before push | false |
+| pipelineAutoPush | Push automatically | false |
+
+---
+
+# ⌨ Commands
+
+| Command | Description |
+|----------|-------------|
+| Go | Full pipeline |
+| Pull | Pull branch |
+| Branch | Create branch |
+| Publish | Push + PR |
+| Config | Open settings |
+
+---
+
+# 🔒 Security
+
+Your API key is stored securely using
+
+VS Code SecretStorage.
+
+No plaintext configuration files.
+
+---
+
+# Requirements
+
+- VS Code 1.85+
+- gitm8 CLI
+- Git
+
+---
+
+# License
+
+MIT

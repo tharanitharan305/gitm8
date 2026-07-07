@@ -19,7 +19,8 @@ let debounceTimer: NodeJS.Timeout | undefined;
  */
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   console.log('[gitm8] Activating extension...');
-
+    console.log("🚀 GitM8 Extension Activated");
+    vscode.window.showInformationMessage("GitM8 Extension Activated");
   // ── Initialize secrets storage ──
   initSecrets(context);
 

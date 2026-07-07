@@ -3,7 +3,7 @@
   "displayName": "gitm8",
   "description": "AI-powered Git workflow — pipeline, branch management, and publish from within VS Code",
   "version": "0.1.0",
-  "publisher": "gitm8",
+  "publisher": "Tharanitharank",
   "icon": "icon.png",
   "license": "MIT",
   "repository": {

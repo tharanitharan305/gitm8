@@ -1,10 +1,9 @@
 .vscode/
 src/
+scripts/
 tsconfig.json
 node_modules/
 .git/
 .gitignore
 **/*.ts.map
 **/*.d.ts
-CHANGELOG.md
-README.md
