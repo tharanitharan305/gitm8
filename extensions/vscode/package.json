@@ -1,0 +1,126 @@
+{
+  "name": "gitm8",
+  "displayName": "gitm8",
+  "description": "AI-powered Git workflow — pipeline, branch management, and publish from within VS Code",
+  "version": "0.1.0",
+  "publisher": "gitm8",
+  "icon": "icon.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tharanitharan305/gitmate"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "git",
+    "ai",
+    "commit",
+    "pipeline",
+    "gitm8"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "gitm8.go",
+        "title": "gitm8: Run Pipeline (Go)"
+      },
+      {
+        "command": "gitm8.pull",
+        "title": "gitm8: Pull Current Branch"
+      },
+      {
+        "command": "gitm8.createBranch",
+        "title": "gitm8: Create Branch"
+      },
+      {
+        "command": "gitm8.publish",
+        "title": "gitm8: Publish Branch (Push + PR)"
+      },
+      {
+        "command": "gitm8.openConfig",
+        "title": "gitm8: Open Configuration"
+      },
+      {
+        "command": "gitm8.refreshStatus",
+        "title": "gitm8: Refresh Status"
+      }
+    ],
+    "configuration": {
+      "title": "gitm8",
+      "properties": {
+        "gitm8.apiBaseUrl": {
+          "type": "string",
+          "default": "https://api.openai.com/v1",
+          "description": "API Base URL for the AI provider (OpenAI-compatible endpoint)"
+        },
+        "gitm8.model": {
+          "type": "string",
+          "default": "gpt-4o-mini",
+          "description": "AI model to use for commit message generation"
+        },
+        "gitm8.tone": {
+          "type": "string",
+          "default": "concise",
+          "enum": ["neutral", "concise", "detailed", "formal", "casual", "funny", "custom"],
+          "description": "Tone of the generated commit messages"
+        },
+        "gitm8.customTone": {
+          "type": "string",
+          "default": "",
+          "description": "Custom tone description (used when tone is 'custom')"
+        },
+        "gitm8.commitStyle": {
+          "type": "string",
+          "default": "conventional",
+          "enum": ["conventional", "freeform"],
+          "description": "Commit message format style"
+        },
+        "gitm8.maxDiffChars": {
+          "type": "number",
+          "default": 6000,
+          "minimum": 1000,
+          "maximum": 50000,
+          "description": "Max diff characters sent to the AI"
+        },
+        "gitm8.pipelinePrecheck": {
+          "type": "boolean",
+          "default": false,
+          "description": "Run precheck (build) as part of the pipeline"
+        },
+        "gitm8.pipelineAutoPush": {
+          "type": "boolean",
+          "default": false,
+          "description": "Auto-push after successful commit"
+        },
+        "gitm8.gitPath": {
+          "type": "string",
+          "default": "git",
+          "description": "Path to the git executable"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./tsconfig.json",
+    "watch": "tsc -watch -p ./tsconfig.json",
+    "lint": "tsc --noEmit",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0",
+    "@vscode/vsce": "^3.0.0"
+  }
+}

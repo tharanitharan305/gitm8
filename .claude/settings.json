@@ -54,7 +54,12 @@
       "Bash(node bin/gitm8.js go --help)",
       "Bash(node -e \"import\\('./src/core/pipeline.js'\\).then\\(m => console.log\\('pipeline module OK, runPipeline:', typeof m.runPipeline\\)\\).catch\\(e => console.error\\(e\\)\\)\")",
       "Bash(timeout 5 node -e ' *)",
-      "Bash(grep -c '```' README.md)"
+      "Bash(grep -c '```' README.md)",
+      "WebSearch",
+      "Bash(mkdir -p \"d:/gitmate/extensions/vscode/.vscode\")"
+    ],
+    "additionalDirectories": [
+      "d:\\gitmate\\extensions\\vscode"
     ]
   }
 }
